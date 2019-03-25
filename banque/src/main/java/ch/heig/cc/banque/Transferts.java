@@ -1,7 +1,7 @@
 package ch.heig.cc.banque;
 
 import java.util.Random;
-
+/*
 public class Transferts {
     static private Random rand = new Random();
     private Banque banque;
@@ -32,5 +32,32 @@ public class Transferts {
 
     public Banque getBanque() {
         return banque;
+    }
+}
+*/
+
+public class Transferts implements Runnable {
+    private Banque banque;
+    private int nbTransfert;
+    private Random random;
+
+    Transferts(Banque banque, int nbTransfert){
+        this.banque = banque;
+        this.nbTransfert = nbTransfert;
+        random = new Random();
+    }
+
+
+    @Override
+    public void run() {
+        for(int i = 0; i< nbTransfert; i++){
+            int debiteur = random.nextInt(banque.getNbComptes());
+            int crediteur = random.nextInt(banque.getNbComptes()-1);
+            if(crediteur >= debiteur){
+                crediteur++;
+            }
+            int montant = 1 + random.nextInt(4);
+            banque.transfert(debiteur,crediteur,montant);
+        }
     }
 }

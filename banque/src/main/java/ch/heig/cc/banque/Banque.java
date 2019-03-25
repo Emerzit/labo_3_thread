@@ -29,8 +29,25 @@ public class Banque {
     }
 
     public void transfert(int debiteur, int crediteur, int montant) {
-        if (comptes.get(debiteur).debit(montant)) {
-            comptes.get(crediteur).credit(montant);
+        int i,j;
+        if(debiteur < crediteur){
+            i = debiteur;
+            j = crediteur;
+        }else{
+            j = debiteur;
+            i = crediteur;
+        }
+        synchronized (comptes.get(i)) {
+            synchronized (comptes.get(j)) {
+                if (comptes.get(debiteur).debit(montant)) {
+                    try {
+                        Thread.sleep(0, 1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    comptes.get(crediteur).credit(montant);
+                }
+            }
         }
     }
 

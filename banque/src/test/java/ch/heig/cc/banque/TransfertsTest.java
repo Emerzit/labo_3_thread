@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TransfertsTest {
-
+/*
     @Test
     void randomTransfert() {
         Transferts tr = new Transferts(new Banque(10));
@@ -28,5 +28,26 @@ class TransfertsTest {
             }
         }
         assertTrue(tr.getBanque().consistent());
+    }*/
+
+    @Test
+    void transferts() {
+        Banque banque = new Banque(10);
+
+        Thread[] thrreads = new Thread[100];
+
+        for (int i = 0; i < 100; i++) {
+            thrreads[i] = new Thread(new Transferts(banque, 1000));
+            thrreads[i].start();
+        }
+        for(int i = 0; i < 100; i++){
+            try{
+                thrreads[i].join();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        assertTrue(banque.consistent());
     }
+
 }
